@@ -9,6 +9,8 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
 
+    <link rel="shortcut icon" href="{{ asset('favicon.png') }}" type="image/x-icon">
+
     <!-- Styles / Scripts -->
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -19,10 +21,14 @@
 
     <div class="container mx-auto px-6 xl:px-[5rem] py-10 min-h-screen">
         <!-- Encabezado -->
-        <div class="flex items-start justify-between mb-10">
+        <div class="flex items-start justify-between mb-5">
             <div>
                 <h1 class="text-3xl font-bold text-title">Gestión de empresas y convenios</h1>
                 <p class="text-general">Accede al panel de control para gestionar tus empresas y convenios.</p>
+
+                <form action="{{ route('logout') }}" method="get">
+                    <button class="btn btn-accent mt-4" type="submit"><i class="fa-solid fa-door-open"></i>  Cerrar Sesión</button>
+                </form>
             </div>
             <img src="{{ asset('img/logoFusalmoColored.png') }}" alt="Logo Fusalmo" class="h-12 lg:h-16">
         </div>
@@ -37,7 +43,7 @@
                     <p class="text-gray-600 text-center mt-2">Gestiona tipos de empresa o agrega nuevas empresas.</p>
                     <a href="{{ url('gestion_empresas') }}">
                         <button
-                            class="bg-title rounded-md px-4 py-2 mt-4 hover:bg-blue-950 outline-current">Acceder</button>
+                            class="bg-title rounded-md px-4 py-2 mt-4 hover:bg-blue-950 outline-current text-white">Acceder</button>
                     </a>
                 </div>
 
@@ -49,7 +55,7 @@
                     </p>
                     <a href="{{ url('listado_convenios') }}">
                         <button
-                            class="bg-title rounded-md px-4 py-2 mt-4 hover:bg-blue-950 outline-current">Acceder</button>
+                            class="bg-title rounded-md px-4 py-2 mt-4 hover:bg-blue-950 outline-current text-white">Acceder</button>
                     </a>
 
                 </div>

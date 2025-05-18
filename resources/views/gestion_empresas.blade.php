@@ -12,6 +12,8 @@
     <!-- FontAwesome -->
     <script src="https://kit.fontawesome.com/a2d9a66d2a.js" crossorigin="anonymous"></script>
 
+    <link rel="shortcut icon" href="{{ asset('favicon.png') }}" type="image/x-icon">
+
     <!-- Styles / Scripts -->
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
     @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/gestion_empresas.js'])
