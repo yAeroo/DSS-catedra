@@ -6,7 +6,6 @@ Route::get('/', function () {
     return view('index');
 });
 
-
 Route::get('gestion_empresas', function () {
     return view('gestion_empresas');
 });

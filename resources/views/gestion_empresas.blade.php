@@ -20,11 +20,11 @@
 
 <body class="bg-gray-50 min-h-screen relative">
 
-    <div class="container mx-auto px-6 py-10 min-h-screen">
+    <div class="container mx-auto px-6 xl:px-[5rem] py-10 min-h-screen">
         <!-- Encabezado -->
         <div class="flex items-start justify-between mb-10">
             <div class="space-y-2">
-                <a href="#" class="text-blue-700 hover:underline text-sm">
+                <a href="{{ url("/") }}" class="text-blue-700 hover:underline text-sm">
                     <i class="fa-solid fa-arrow-left mr-1"></i> Regresar
                 </a>
                 <h1 class="text-3xl font-bold text-gray-800">Gestión de empresas</h1>
