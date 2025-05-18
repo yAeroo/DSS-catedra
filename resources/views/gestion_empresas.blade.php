@@ -20,7 +20,7 @@
 
 <body class="bg-gray-100 min-h-screen relative">
 
-    <div class="container mx-auto px-6 py-10 min-h-screen">
+    <div class="container mx-auto px-6 xl:px-[5rem] py-10 min-h-screen">
         <!-- Encabezado -->
         <div class="flex items-start justify-between mb-10">
             <div class="space-y-2">
