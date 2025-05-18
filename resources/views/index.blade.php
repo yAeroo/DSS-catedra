@@ -37,7 +37,7 @@
                     <p class="text-gray-600 text-center mt-2">Gestiona tipos de empresa o agrega nuevas empresas.</p>
                     <a href="{{ url('gestion_empresas') }}">
                         <button
-                            class="bg-title rounded-md px-4 py-2 mt-4 hover:bg-blue-950 outline-current">Acceder</button>
+                            class="bg-title rounded-md px-4 py-2 mt-4 hover:bg-[#003b5c] outline-current">Acceder</button>
                     </a>
                 </div>
 
@@ -49,7 +49,7 @@
                     </p>
                     <a href="{{ url('listado_convenios') }}">
                         <button
-                            class="bg-title rounded-md px-4 py-2 mt-4 hover:bg-blue-950 outline-current">Acceder</button>
+                            class="bg-title rounded-md px-4 py-2 mt-4 hover:bg-[#003b5c] outline-current">Acceder</button>
                     </a>
 
                 </div>

@@ -1,41 +1,42 @@
-//funcionalidad de cambion entre secciones
-function mostrarSeccion(seccion) {
-    document.getElementById('tipoEmpresa').classList.add('hidden');
-    document.getElementById('listadoEmpresas').classList.add('hidden');
+// Mostrar secciones
+function mostrarSeccion(seccion, botonActivo) {
+    // Ocultar todas las secciones
+    $("#tipoEmpresa, #listadoEmpresas").addClass("hidden");
+    $("#" + seccion).removeClass("hidden");
 
-    document.getElementById(seccion).classList.remove('hidden');
+    // Quitar clase activa de todos los botones
+    document.querySelectorAll(".seccion-btn").forEach(btn => {
+        btn.classList.remove("bg-title", "text-white");
+        btn.classList.add("bg-white", "text-gray-700");
+    });
+
+    // Agregar clase activa al botón clicado
+    botonActivo.classList.remove("bg-white", "text-gray-700");
+    botonActivo.classList.add("bg-title", "text-white");
 }
 
 window.mostrarSeccion = mostrarSeccion;
 
-//funcionalidad de boton recargar
+// Restablecer filtros
 function restablecerFiltros() {
-    document.getElementById('busqueda').value = '';
-    document.getElementById('filtroListado').selectedIndex = 0;
+    $("#busqueda").val("");
+    $("#filtroListado").prop("selectedIndex", 0);
 }
-
 window.restablecerFiltros = restablecerFiltros;
 
-//abrir modal
-document.querySelectorAll('[data-open-modal]').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const modalId = btn.getAttribute('data-open-modal');
-        const modal = document.querySelector(`[data-modal-id="${modalId}"]`);
-        if (modal) {
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            modal.classList.add('opacity-100', 'pointer-events-auto');
-        }
-    });
+// Abrir modales
+$("[data-open-modal]").on("click", function () {
+    const modalId = $(this).data("open-modal");
+    const $modal = $(`[data-modal-id="${modalId}"]`);
+    $modal
+        .removeClass("opacity-0 pointer-events-none")
+        .addClass("opacity-100 pointer-events-auto");
 });
 
-// Cerrar cualquier modal
-document.querySelectorAll('[data-close-modal]').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const modal = btn.closest('.transit');
-        if (modal) {
-            modal.classList.remove('opacity-100', 'pointer-events-auto');
-            modal.classList.add('opacity-0', 'pointer-events-none');
-        }
-    });
+// Cerrar modales
+$("[data-close-modal]").on("click", function () {
+    const $modal = $(this).closest(".transit");
+    $modal
+        .removeClass("opacity-100 pointer-events-auto")
+        .addClass("opacity-0 pointer-events-none");
 });
-
