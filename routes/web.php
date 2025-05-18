@@ -13,4 +13,3 @@ Route::get('gestion_empresas', function () {
 Route::get('listado_convenios', function () {
     return view('listado_convenios');
 });
-

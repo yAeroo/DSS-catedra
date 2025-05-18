@@ -18,7 +18,7 @@
     @endif
 </head>
 
-<body class="bg-gray-100 min-h-screen relative">
+<body class="bg-gray-50 min-h-screen relative">
 
     <div class="container mx-auto px-6 xl:px-[5rem] py-10 min-h-screen">
         <!-- Encabezado -->
@@ -34,11 +34,11 @@
 
         <!-- Botones agregar -->
         <div class="flex flex-wrap gap-4 mb-6">
-            <button onclick="document.getElementById('modalAgregarTipo').classList.remove('hidden')"
+            <button data-open-modal="modalAgregarTipo"
                 class="bg-blue-700 text-white px-4 py-2 rounded-md shadow hover:bg-blue-800 transition">
                 <i class="fa-solid fa-plus mr-2"></i>Agregar tipo de empresa
             </button>
-            <button onclick="document.getElementById('modalAgregarEmpresa').classList.remove('hidden')"
+            <button data-open-modal="modalAgregarEmpresa"
                 class="bg-green-700 text-white px-4 py-2 rounded-md shadow hover:bg-green-800 transition">
                 <i class="fa-solid fa-plus mr-2"></i>Agregar empresa
             </button>
@@ -46,7 +46,7 @@
 
 
         <!-- Búsqueda y Filtro -->
-        <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <div class="relative flex flex-wrap items-center justify-between gap-4 mb-6">
             <div class="relative max-w-sm flex-1">
                 <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
                     <i class="fa-solid fa-magnifying-glass"></i>
@@ -120,10 +120,10 @@
                             <td class="px-4 py-2">Tecnología</td>
                             <td class="px-4 py-2">Empresas dedicadas al desarrollo de software y hardware</td>
                             <td class="px-4 py-2 space-x-2">
-                                <button onclick="document.getElementById('modalEditar').classList.remove('hidden')">
+                                <button data-open-modal="modalEditar">
                                     <i class="fa-solid fa-pen text-blue-600 hover:text-blue-800"></i>
                                 </button>
-                                <button onclick="document.getElementById('modalConfirmarEliminarr').classList.remove('hidden')">
+                                <button data-open-modal="modalConfirmarEliminarr">
                                     <i class="fa-solid fa-trash text-red-600 hover:text-red-800"></i>
                                 </button>
 
@@ -157,13 +157,13 @@
                             <td class="px-4 py-2">MULT-BID-2024</td>
                             <td class="px-4 py-2">Activo</td>
                             <td class="px-4 py-2 space-x-2">
-                                <button onclick="document.getElementById('modalDetallesEmpresa').classList.remove('hidden')">
+                                <button data-open-modal="modalDetallesEmpresa">
                                     <i class="fa-solid fa-magnifying-glass text-gray-700 hover:text-blue-600"></i>
                                 </button>
-                                <button onclick="document.getElementById('modalEditarEmpresa').classList.remove('hidden')">
+                                <button data-open-modal="modalEditarEmpresa">
                                     <i class="fa-solid fa-pen text-blue-600 hover:text-blue-800"></i>
                                 </button>
-                                <button onclick="document.getElementById('modalConfirmarEliminar').classList.remove('hidden')">
+                                <button data-open-modal="modalConfirmarEliminar">
                                     <i class="fa-solid fa-trash text-red-600 hover:text-red-800"></i>
                                 </button>
                             </td>
@@ -178,51 +178,57 @@
     <!-- modales -->
 
     <!-- Modal Agregar Tipo de Empresa -->
-    <div id="modalAgregarTipo" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div data-modal-id="modalAgregarTipo"
+        class="transit fixed inset-0 bg-black/60 flex items-center justify-center z-50
+            opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold text-gray-800">
+                <h3 class="text-lg font-semibold text-gray-800 flex items-center">
                     <i class="fa-solid fa-plus mr-2 text-blue-700"></i>Agregar tipo de empresa
                 </h3>
-                <button onclick="document.getElementById('modalAgregarTipo').classList.add('hidden')">
+                <button data-close-modal aria-label="Cerrar modal">
                     <i class="fa-solid fa-xmark text-gray-600 hover:text-red-600"></i>
                 </button>
             </div>
 
-            <!-- Subtítulo -->
             <p class="text-gray-600 mb-6">Proporciona información sobre el tipo de empresa a registrar</p>
 
             <div class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">N°</label>
-                    <input type="text" class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800" placeholder="ID automático o manual">
+                    <input type="text" class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800" placeholder="ID automático o manual" />
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Nombre del tipo de empresa</label>
-                    <input type="text" class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800" placeholder="Nombre del tipo">
+                    <input type="text" class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800" placeholder="Nombre del tipo" />
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
                     <textarea class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800" rows="3" placeholder="Descripción del tipo"></textarea>
                 </div>
                 <div class="flex justify-end gap-2">
-                    <button onclick="document.getElementById('modalAgregarTipo').classList.add('hidden')"
-                        class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">Cancelar</button>
-                    <button class="bg-blue-700 text-white px-4 py-2 rounded-md hover:bg-blue-800">Guardar</button>
+                    <button data-close-modal
+                        class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 transition">
+                        Cancelar
+                    </button>
+                    <button class="bg-blue-700 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition">
+                        Guardar
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Modal Agregar Empresa -->
-    <div id="modalAgregarEmpresa" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div data-modal-id="modalAgregarEmpresa" class="transit fixed inset-0 bg-black/60 flex items-center justify-center z-50
+            opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="bg-white rounded-xl shadow-lg w-full max-w-3xl p-6">
             <!-- Encabezado -->
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-semibold text-gray-800 flex items-center">
                     <i class="fa-solid fa-plus mr-2 text-green-700"></i>Agregar empresa
                 </h3>
-                <button onclick="document.getElementById('modalAgregarEmpresa').classList.add('hidden')">
+                <button data-close-modal>
                     <i class="fa-solid fa-xmark text-gray-600 hover:text-red-600"></i>
                 </button>
             </div>
@@ -281,56 +287,66 @@
 
             <!-- Botones -->
             <div class="flex justify-end gap-2 mt-6">
-                <button onclick="document.getElementById('modalAgregarEmpresa').classList.add('hidden')"
+                <button data-close-modal
                     class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">Cancelar</button>
                 <button class="bg-green-700 text-white px-4 py-2 rounded-md hover:bg-green-800">Guardar</button>
             </div>
         </div>
     </div>
 
+
     <!-- Modal para editar tipo de empresa -->
-    <div id="modalEditar"
-        class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold text-gray-800">
-                    <i class="fa-solid fa-pen mr-2 text-blue-700"></i>Editar el tipo de empresa
-                </h3>
-                <button onclick="document.getElementById('modalEditar').classList.add('hidden')">
-                    <i class="fa-solid fa-xmark text-gray-600 hover:text-red-600"></i>
-                </button>
-            </div>
-
-            <!-- Subtítulo -->
-            <p class="text-gray-600 mb-6">Puedes modificar la información del tipo de empresa</p>
-
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Nombre del tipo de empresa</label>
-                    <input type="text" class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800" placeholder="Nuevo nombre">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Descripción del tipo de empresa</label>
-                    <textarea class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800" rows="3" placeholder="Nueva descripción"></textarea>
-                </div>
-                <div class="flex justify-end gap-2 mt-6">
-                    <button onclick="document.getElementById('modalEditar').classList.add('hidden')"
-                        class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">Cancelar</button>
-                    <button class="bg-blue-700 text-white px-4 py-2 rounded-md hover:bg-blue-800">Guardar cambios</button>
-                </div>
-            </div>
-        </div>
+<div data-modal-id="modalEditar"
+     class="transit fixed inset-0 bg-black/60 flex items-center justify-center z-50
+            opacity-0 pointer-events-none transition-opacity duration-300">
+  <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-semibold text-gray-800">
+        <i class="fa-solid fa-pen mr-2 text-blue-700"></i>Editar el tipo de empresa
+      </h3>
+      <button data-close-modal aria-label="Cerrar modal">
+        <i class="fa-solid fa-xmark text-gray-600 hover:text-red-600"></i>
+      </button>
     </div>
 
+    <!-- Subtítulo -->
+    <p class="text-gray-600 mb-6">Puedes modificar la información del tipo de empresa</p>
+
+    <div class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Nombre del tipo de empresa</label>
+        <input type="text" class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800"
+               placeholder="Nuevo nombre" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Descripción del tipo de empresa</label>
+        <textarea class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800"
+                  rows="3" placeholder="Nueva descripción"></textarea>
+      </div>
+      <div class="flex justify-end gap-2 mt-6">
+        <button data-close-modal
+                class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 transition">
+          Cancelar
+        </button>
+        <button class="bg-blue-700 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition">
+          Guardar cambios
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
     <!-- Modal para editar empresa -->
-    <div id="modalEditarEmpresa" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div data-modal-id="modalEditarEmpresa" class="transit fixed inset-0 bg-black/60 flex items-center justify-center z-50
+            opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="bg-white rounded-xl shadow-lg w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
             <!-- Encabezado -->
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-semibold text-gray-800">
                     <i class="fa-solid fa-pen mr-2 text-blue-700"></i>Editar empresa
                 </h3>
-                <button onclick="document.getElementById('modalEditarEmpresa').classList.add('hidden')">
+                <button data-close-modal>
                     <i class="fa-solid fa-xmark text-gray-600 hover:text-red-600 text-xl"></i>
                 </button>
             </div>
@@ -397,7 +413,7 @@
 
                 <!-- Botones -->
                 <div class="flex justify-end gap-2 pt-4">
-                    <button onclick="document.getElementById('modalEditarEmpresa').classList.add('hidden')"
+                    <button data-close-modal
                         class="min-w-[120px] px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition">
                         Cancelar
                     </button>
@@ -405,52 +421,54 @@
                         Guardar cambios
                     </button>
                 </div>
-
             </div>
         </div>
     </div>
 
 
     <!-- Modal Confirmación de Eliminación en listado-->
-    <div id="modalConfirmarEliminar" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div data-modal-id="modalConfirmarEliminar" class="transit fixed inset-0 bg-black/60 flex items-center justify-center z-50
+            opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-semibold text-gray-800">
                     <i class="fa-solid fa-triangle-exclamation text-red-600 mr-2"></i>Confirmar eliminación
                 </h3>
-                <button onclick="document.getElementById('modalConfirmarEliminar').classList.add('hidden')">
+                <button data-close-modal>
                     <i class="fa-solid fa-xmark text-gray-600 hover:text-red-600"></i>
                 </button>
             </div>
             <p class="text-gray-700 mb-4">¿Estás seguro de eliminar esta empresa? <strong>Esta acción no se puede deshacer.</strong></p>
             <div class="flex justify-end gap-2">
-                <button onclick="document.getElementById('modalConfirmarEliminar').classList.add('hidden')" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">Cancelar</button>
+                <button data-close-modal class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">Cancelar</button>
                 <button class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700">Eliminar</button>
             </div>
         </div>
     </div>
 
     <!-- Modal Confirmación de Eliminación en tipo-->
-    <div id="modalConfirmarEliminarr" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div data-modal-id="modalConfirmarEliminarr" class="transit fixed inset-0 bg-black/60 flex items-center justify-center z-50
+            opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-semibold text-gray-800">
                     <i class="fa-solid fa-triangle-exclamation text-red-600 mr-2"></i>Confirmar eliminación
                 </h3>
-                <button onclick="document.getElementById('modalConfirmarEliminarr').classList.add('hidden')">
+                <button data-close-modal>
                     <i class="fa-solid fa-xmark text-gray-600 hover:text-red-600"></i>
                 </button>
             </div>
             <p class="text-gray-700 mb-4">¿Estás seguro de eliminar este tipo de empresa? <strong>Esta acción no se puede deshacer.</strong></p>
             <div class="flex justify-end gap-2">
-                <button onclick="document.getElementById('modalConfirmarEliminarr').classList.add('hidden')" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">Cancelar</button>
+                <button data-close-modal class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">Cancelar</button>
                 <button class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700">Eliminar</button>
             </div>
         </div>
     </div>
 
     <!-- Modal Detalles de Empresa -->
-    <div id="modalDetallesEmpresa" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div data-modal-id="modalDetallesEmpresa" class="transit fixed inset-0 bg-black/60 flex items-center justify-center z-50
+            opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="bg-white rounded-xl shadow-lg w-full max-w-3xl p-6 overflow-y-auto max-h-[90vh]">
             <!-- Encabezado -->
             <div class="flex items-center justify-between mb-4">
@@ -458,7 +476,7 @@
                     <i class="fa-solid fa-magnifying-glass text-blue-600 mr-2"></i>
                     Detalles de la empresa
                 </h3>
-                <button onclick="document.getElementById('modalDetallesEmpresa').classList.add('hidden')">
+                <button data-close-modal>
                     <i class="fa-solid fa-xmark text-gray-600 hover:text-red-600 text-xl"></i>
                 </button>
             </div>
@@ -511,7 +529,7 @@
 
             <!-- Botón cerrar -->
             <div class="flex justify-end mt-6">
-                <button onclick="document.getElementById('modalDetallesEmpresa').classList.add('hidden')" class="bg-blue-700 text-white px-4 py-2 rounded-md hover:bg-blue-800">
+                <button data-close-modal class="bg-blue-700 text-white px-4 py-2 rounded-md hover:bg-blue-800">
                     Cerrar
                 </button>
             </div>
