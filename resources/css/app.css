@@ -16,6 +16,7 @@
         --color-title: oklch(44.23% 0.107 243.04);
         --color-subtitle: oklch(55.20% 0.015 285.89);
         --color-successful: oklch(63.20% 0.186 147.37);
+        --color-botton: oklch(61.88% 0.231 259.63)
 }
 
 @import "@fortawesome/fontawesome-free/css/all.min.css";
