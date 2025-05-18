@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('tipo_convenio');
             $table->date('fecha_inicio');
             $table->date('fecha_fin')->nullable();
-            $table->string('convenio_detalle');
+            $table->text('convenio_detalle');
             $table->boolean('convenio_respaldado')->default(true);
             $table->boolean('estado_evidencia')->default(false);
             $table->boolean('habilitado')->default(true);

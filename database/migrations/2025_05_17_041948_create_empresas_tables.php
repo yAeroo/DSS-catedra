@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tipo_empresas', function (Blueprint $table) {
             $table->id('tipo_empresa_id')->autoIncrement();
             $table->string('nombre');
-            $table->string('descripcion')->nullable();
+            $table->text('descripcion')->nullable();
             $table->boolean('habilitada')->default(true);
             $table->timestamps();
         });
@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('codigo_donante');
             $table->string('tipo_cooperacion');
             $table->string('tipo_relacion');
-            $table->string('direccion');
+            $table->text('direccion');
             $table->enum('estado', ['activo', 'inactivo'])->default('activo');
             $table->foreignId('tipo_empresa_id')->constrained('tipo_empresas', 'tipo_empresa_id')->onDelete('cascade');
             $table->boolean('habilitada')->default(true);
