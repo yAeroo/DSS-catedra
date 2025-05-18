@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('archivos_evidencia', function (Blueprint $table) {
+        Schema::create('archivo_evidencias', function (Blueprint $table) {
             $table->id('archivo_id');
             $table->foreignId('convenio_id')->constrained('convenios', 'convenio_id')->onDelete('cascade');
             $table->string('nombre_archivo');
