@@ -24,7 +24,7 @@
         <div class="flex items-start justify-between mb-5">
             <div>
                 <h1 class="text-3xl font-bold text-title">Gestión de empresas y convenios</h1>
-                <p class="text-general">Accede al panel de control para gestionar tus empresas y convenios.</p>
+                <p class="text-general">Accede al panel de control correspondiente para gestionar tus empresas y convenios.</p>
 
                 <form action="{{ route('logout') }}" method="get">
                     <button class="btn btn-accent mt-4" type="submit"><i class="fa-solid fa-door-open"></i>  Cerrar Sesión</button>
