@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TipoEmpresa extends Model
 {
+    protected $table = 'tipo_empresas'; // Agrega esta línea
     protected $primaryKey = 'tipo_empresa_id';
     protected $fillable = ['nombre', 'descripcion', 'habilitada'];
 

@@ -37,12 +37,8 @@
         <!-- Botones agregar -->
         <div class="flex flex-wrap gap-4 mb-6">
             <button data-open-modal="modalAgregarTipo"
-                class="bg-blue-700 text-white px-4 py-2 rounded-md shadow hover:bg-blue-800 transition">
+                class="bg-green-700 text-white px-4 py-2 rounded-md shadow hover:bg-blue-800 transition">
                 <i class="fa-solid fa-plus mr-2"></i>Agregar tipo de empresa
-            </button>
-            <button data-open-modal="modalAgregarEmpresa"
-                class="bg-green-700 text-white px-4 py-2 rounded-md shadow hover:bg-green-800 transition">
-                <i class="fa-solid fa-plus mr-2"></i>Agregar empresa
             </button>
         </div>
 
@@ -103,14 +99,14 @@
 
         <!-- Botones sección -->
         <div class="flex gap-4 mb-6">
-            <button onclick="mostrarSeccion('tipoEmpresa', this)"
+            <a href="{{ route('tipos-empresa.index') }}"
                 class="seccion-btn bg-title text-white shadow-md px-6 py-3 rounded-xl text-gray-700 font-medium hover:bg-[#003b5c] hover:text-white transition">
                 Tipo de empresa
-            </button>
-            <button onclick="mostrarSeccion('listadoEmpresas', this)"
+            </a>
+            <a href="{{ route('empresas.index') }}"
                 class="seccion-btn shadow-md px-6 py-3 rounded-xl text-gray-700 font-medium hover:bg-[#003b5c] hover:text-white transition">
                 Listado de empresas
-            </button>
+            </a>
         </div>
 
         <!-- Sección Tipo de empresa -->
