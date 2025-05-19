@@ -19,14 +19,15 @@
 
 <body class="bg-background min-h-screen relative">
 
-    <div class="container mx-auto px-6 py-10 min-h-screen">
+    <div class="container mx-auto px-6 xl:px-[5rem] py-10 min-h-screen">
         <!-- Encabezado -->
         <div class="flex items-start justify-between mb-10">
             <div class="space-y-2">
                 <a href="{{ url("/") }}" class="text-blue-700 hover:underline text-sm text-decoration-none">
-                    <i class="fa-solid fa-arrow-left mr-1"></i> Regresar
+                    <i class="fa-solid fa-arrow-left mr-1 mb-4"></i> Regresar
                 </a>
-                <h1 class="text-3xl font-bold text-general">Listado de Convenios</h1>
+                <h1 class="text-3xl font-bold text-title">Listado de Convenios</h1>
+                <p class="text-general">En este apartado puedes gestionar todos los convenios con empresas.</p>
             </div>
             <img src="{{ asset('img/logoFusalmoColored.png') }}" alt="Logo Fusalmo" class="h-12 lg:h-16">
         </div>
@@ -34,58 +35,9 @@
         <!-- Botón Agregar Convenio -->
         <div class="flex flex-wrap gap-4 mb-6">
             <button data-open-modal="modalAgregarConvenio"
-                class="bg-blue-700 text-background px-4 py-2 rounded-md shadow hover:bg-blue-800 transition">
+                class="bg-green-700 text-background px-4 py-2 rounded-md shadow hover:bg-green-800 transition">
                 <i class="fa-solid fa-plus mr-2"></i>Agregar convenio
             </button>
-        </div>
-
-        <!-- Búsqueda y Filtro -->
-        <div class="relative flex flex-wrap items-center justify-between gap-4 mb-6">
-            <div class="relative max-w-sm flex-1">
-                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-subtitle">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </span>
-                <input type="text" id="busqueda" placeholder="Buscar..."
-                    class="pl-10 pr-4 py-2 w-full bg-background text-general border border-background rounded-md shadow-sm text-sm focus:ring-title focus:border-title placeholder-subtitle">
-            </div>
-            <div class="flex items-center gap-2">
-                <select id="filtroListado" class="bg-background border border-subtitle text-sm rounded-md px-3 py-2 text-subtitle shadow-sm focus:ring-title focus:border-title">
-                    <option value="">Filtrar listado...</option>
-
-                    <!-- Tipo de empresa -->
-                    <option disabled class="font-semibold">─ Tipo de empresa ─</option>
-                    @if ($tipos_empresa->isEmpty())
-                        <option disabled class="font-thin">Sin Registros</option>
-                    @else
-                        @foreach ($tipos_empresa as $tipoEmpresa)
-                        <option value="{{ $tipoEmpresa->tipo_empresa_id }}">{{ $tipoEmpresa->nombre }}</option>
-                        @endforeach
-                    @endif
-
-                    <!-- Sede -->
-                    <option disabled class="font-semibold">─ Sede ─</option>
-                    <option value="sede_san_salvador">San Salvador</option>
-                    <option value="sede_santa_ana">Santa Ana</option>
-                    <option value="sede_san_miguel">San Miguel</option>
-
-                    <!-- Tipo de convenio -->
-                    <option disabled class="font-semibold">─ Tipo de convenio ─</option>
-                    <option value="convenio_proyecto">Proyecto</option>
-                    <option value="convenio_consultoria">Consultoría</option>
-                    <option value="convenio_donaciones">Donaciones</option>
-                    <option value="convenio_acuerdo">Acuerdo</option>
-
-                    <!-- Situación actual -->
-                    <option disabled class="font-semibold">─ Situación actual ─</option>
-                    <option value="situacion_activa">Activa</option>
-                    <option value="situacion_finalizada">Finalizada</option>
-                </select>
-
-                <!-- Botón de recarga -->
-                <button onclick="restablecerFiltros()" class="text-botton hover:text-title" title="Restablecer filtros">
-                    <i class="fa-solid fa-rotate-right text-lg"></i>
-                </button>
-            </div>
         </div>
 
         <!-- Botones de sección -->
@@ -99,7 +51,7 @@
         </div>
 
         <!-- Sección Empresas con Convenios -->
-        <div id="conConvenios" class="bg-background rounded-xl shadow-md p-6 mb-10">
+        <div id="conConvenios" class="bg-white rounded-xl shadow-md p-6 mb-10">
             <h2 class="text-xl font-semibold text-general mb-4">Empresas con convenios</h2>
             <div class="overflow-x-auto">
                 <table class="min-w-full text-sm text-left">
@@ -139,7 +91,7 @@
         </div>
 
         <!-- Sección Empresas sin Convenios -->
-        <div id="sinConvenios" class="bg-background rounded-xl shadow-md p-6 hidden">
+        <div id="sinConvenios" class="bg-white rounded-xl shadow-md p-6 hidden">
             <h2 class="text-xl font-semibold text-general mb-4">Empresas sin convenios</h2>
             <div class="overflow-x-auto">
                 <table class="min-w-full text-sm text-left">
@@ -334,35 +286,35 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pr-4">
                     <div>
                         <p class="font-semibold">Abreviatura:</p>
-                        <div class="border rounded-md p-2 bg-gray-50 text-subtitle" id="abreviatura"></div>
+                        <div class="rounded-md p-2 bg-gray-50 text-subtitle" id="abreviatura"></div>
                     </div>
                     <div>
                         <p class="font-semibold">Nombre de la empresa:</p>
-                        <div class="border rounded-md p-2 bg-gray-50 text-subtitle" id="nombre_empresa"></div>
+                        <div class="rounded-md p-2 bg-gray-50 text-subtitle" id="nombre_empresa"></div>
                     </div>
                     <div>
                         <p class="font-semibold">Código donante:</p>
-                        <div class="border rounded-md p-2 bg-gray-50 text-subtitle" id="codigo_donante"></div>
+                        <div class="rounded-md p-2 bg-gray-50 text-subtitle" id="codigo_donante"></div>
                     </div>
                     <div>
                         <p class="font-semibold">Estado:</p>
-                        <div class="border rounded-md p-2 bg-gray-50 text-subtitle capitalize" id="estado_empre"></div>
+                        <div class="rounded-md p-2 bg-gray-50 text-subtitle capitalize" id="estado_empre"></div>
                     </div>
                     <div>
                         <p class="font-semibold">Tipo de operación:</p>
-                        <div class="border rounded-md p-2 bg-gray-50 text-subtitle" id="tipo_operacion"></div>
+                        <div class="rounded-md p-2 bg-gray-50 text-subtitle" id="tipo_operacion"></div>
                     </div>
                     <div>
                         <p class="font-semibold">Tipo de empresa:</p>
-                        <div class="border rounded-md p-2 bg-gray-50 text-subtitle" id="tipo_empresa_det"></div>
+                        <div class="rounded-md p-2 bg-gray-50 text-subtitle" id="tipo_empresa_det"></div>
                     </div>
                     <div>
                         <p class="font-semibold">Tipo de relación:</p>
-                        <div class="border rounded-md p-2 bg-gray-50 text-subtitle" id="tipo_relacion"></div>
+                        <div class="rounded-md p-2 bg-gray-50 text-subtitle" id="tipo_relacion"></div>
                     </div>
                     <div>
                         <p class="font-semibold">Dirección:</p>
-                        <div class="border rounded-md p-2 bg-gray-50 text-subtitle" id="direccion_det"></div>
+                        <div class="rounded-md p-2 bg-gray-50 text-subtitle" id="direccion_det"></div>
                     </div>
                 </div>
 
@@ -371,42 +323,42 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <p class="font-semibold">Sede:</p>
-                            <div class="border rounded-md p-2 bg-gray-50 text-subtitle" id="sede_det"></div>
+                            <div class="rounded-md p-2 bg-gray-50 text-subtitle" id="sede_det"></div>
                         </div>
 
                         <div>
                             <p class="font-semibold">Correo electrónico:</p>
-                            <div class="border rounded-md p-2 bg-gray-50 text-subtitle" id="correo_det"></div>
+                            <div class="rounded-md p-2 bg-gray-50 text-subtitle" id="correo_det"></div>
                         </div>
 
                         <div>
                             <p class="font-semibold">Nombre de contacto:</p>
-                            <div class="border rounded-md p-2 bg-gray-50 text-subtitle" id="nombre_contacto_det"></div>
+                            <div class="rounded-md p-2 bg-gray-50 text-subtitle" id="nombre_contacto_det"></div>
                         </div>
 
                         <div>
                             <p class="font-semibold">Situación actual:</p>
-                            <div class="border rounded-md p-2 bg-gray-50 text-subtitle" id="situacion_actual_det"></div>
+                            <div class="rounded-md p-2 bg-gray-50 text-subtitle" id="situacion_actual_det"></div>
                         </div>
 
                         <div>
                             <p class="font-semibold">Número de contacto:</p>
-                            <div class="border rounded-md p-2 bg-gray-50 text-subtitle" id="numero_contacto_det"></div>
+                            <div class="rounded-md p-2 bg-gray-50 text-subtitle" id="numero_contacto_det"></div>
                         </div>
 
                         <div>
                             <p class="font-semibold">Fecha de inicio:</p>
-                            <div class="border rounded-md p-2 bg-gray-50 text-subtitle" id="fecha_inicio_det"></div>
+                            <div class="rounded-md p-2 bg-gray-50 text-subtitle" id="fecha_inicio_det"></div>
                         </div>
 
                         <div>
                             <p class="font-semibold">Tipo de convenio:</p>
-                            <div class="border rounded-md p-2 bg-gray-50 text-subtitle" id="tipo_convenio_det">Consultoría</div>
+                            <div class="rounded-md p-2 bg-gray-50 text-subtitle" id="tipo_convenio_det">Consultoría</div>
                         </div>
 
                         <div>
                             <p class="font-semibold">Fecha de finalización:</p>
-                            <div class="border rounded-md p-2 bg-gray-50 text-subtitle" id="fecha_fin_det">2025-12-20</div>
+                            <div class="rounded-md p-2 bg-gray-50 text-subtitle" id="fecha_fin_det">2025-12-20</div>
                         </div>
                     </div>
 
@@ -414,7 +366,7 @@
                     <!-- Convenio -->
                     <div>
                         <p class="font-semibold">Convenio:</p>
-                        <div class="border rounded-md p-2 bg-gray-50 text-subtitle" id="convenio_det">
+                        <div class="rounded-md p-2 bg-gray-50 text-subtitle" id="convenio_det">
                             Consultoría para desarrollo tecnológico en sector educativo.
                         </div>
                     </div>
@@ -437,11 +389,11 @@
                     <div class="mt-4 flex flex-col sm:flex-row gap-4">
                         <div class="w-full">
                             <label class="block font-medium mb-1">Fecha de registro</label>
-                            <div id="fecha_registro_det" class="w-full border border-subtitle rounded-md px-3 py-2 text-general" ></div>
+                            <div id="fecha_registro_det" class="w-full rounded-md px-3 py-2 text-general" ></div>
                         </div>
                         <div class="w-full">
                             <label class="block font-medium mb-1">Fecha de última modificación</label>
-                            <div  id="fecha_modificacion_det" class="w-full border border-subtitle rounded-md px-3 py-2 text-general"></div>
+                            <div  id="fecha_modificacion_det" class="w-full rounded-md px-3 py-2 text-general"></div>
                         </div>
                     </div>
                 </div>

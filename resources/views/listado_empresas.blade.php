@@ -20,16 +20,17 @@
     @endif
 </head>
 
-<body class="bg-gray-50 min-h-screen relative">
+<body class="bg-background min-h-screen relative">
 
     <div class="container mx-auto px-6 xl:px-[5rem] py-10 min-h-screen">
         <!-- Encabezado -->
         <div class="flex items-start justify-between mb-10">
             <div class="space-y-2">
                 <a href="{{ url("/") }}" class="text-blue-700 hover:underline text-sm text-decoration-none">
-                    <i class="fa-solid fa-arrow-left mr-1"></i> Regresar
+                    <i class="fa-solid fa-arrow-left mr-1 mb-4"></i> Regresar
                 </a>
-                <h1 class="text-3xl font-bold text-gray-800">Listado de empresas</h1>
+                <h1 class="text-3xl font-bold text-title">Listado de Empresas</h1>
+                <p class="text-general">En este apartado puedes gestionar todas las empresas.</p>
             </div>
             <img src="{{ asset('img/logoFusalmoColored.png') }}" alt="Logo Fusalmo" class="h-12 lg:h-16">
         </div>
@@ -40,44 +41,6 @@
                 class="bg-green-700 text-white px-4 py-2 rounded-md shadow hover:bg-green-800 transition">
                 <i class="fa-solid fa-plus mr-2"></i>Agregar empresa
             </button>
-        </div>
-
-        <!-- Búsqueda y Filtro -->
-        <div class="relative flex flex-wrap items-center justify-between gap-4 mb-6">
-            <div class="relative max-w-sm flex-1">
-                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </span>
-                <input type="text" id="busqueda" placeholder="Buscar..."
-                    class="pl-10 pr-4 py-2 w-full bg-gray-100 text-gray-800 border border-gray-300 rounded-md shadow-sm text-sm focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500">
-            </div>
-            <div class="flex items-center gap-2">
-                <select id="filtroListado"
-                    class="bg-white border border-gray-300 text-sm rounded-md px-3 py-2 text-gray-700 shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                    <option value="">Filtrar listado...</option>
-
-                    <!-- Tipo de empresa -->
-                    <option disabled class="font-black">─ Tipo de empresa ─</option>
-                    @if ($tipoEmpresas->isEmpty())
-                        <option disabled class="font-thin">Sin Registros</option>
-                    @else
-                        @foreach ($tipoEmpresas as $tipo)
-                            <option value="{{ $tipo->tipo_empresa_id }}">{{ $tipo->nombre }}</option>
-                        @endforeach
-                    @endif
-
-                    <!-- Estado -->
-                    <option disabled class="font-semibold">─ Estado ─</option>
-                    <option value="activo">Activa</option>
-                    <option value="inactivo">inactivo</option>
-                </select>
-
-                <!-- Botón de recarga -->
-                <button onclick="restablecerFiltros()" class="text-blue-700 hover:text-blue-900"
-                    title="Restablecer filtros">
-                    <i class="fa-solid fa-rotate-right text-lg"></i>
-                </button>
-            </div>
         </div>
 
         <!-- Botones sección -->
@@ -94,6 +57,7 @@
 
         <!-- Tabla de empresas -->
         <div class="bg-white rounded-xl shadow-md p-6 mb-10">
+            <h2 class="text-xl font-semibold text-general mb-4">Listado de empresas</h2>
             <div class="overflow-x-auto">
                 <table class="min-w-full text-sm text-left">
                     <thead class="bg-gray-100 text-gray-700">
@@ -104,7 +68,7 @@
                             <th class="px-4 py-2">Código donante</th>
                             <th class="px-4 py-2">Tipo</th>
                             <th class="px-4 py-2">Estado</th>
-                            <th class="px-4 py-2">Acciones</th>
+                            <th class="px-4 py-2 text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200 text-gray-700">
@@ -130,7 +94,7 @@
                                             {{ $empresa->estado }}
                                         </span>
                                     </td>
-                                    <td class="px-4 py-2 space-x-2">
+                                    <td class="px-4 py-2 space-x-2 text-center">
                                         <!-- Botón Detalles -->
                                         <button data-open-modal="modalDetallesEmpresa-{{ $empresa->empresa_id }}">
                                             <i class="fa-solid fa-magnifying-glass text-gray-700 hover:text-blue-600"></i>
@@ -372,35 +336,35 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 text-sm text-gray-700">
                     <div>
                         <p class="font-semibold">Abreviatura:</p>
-                        <div class="border rounded-md p-2 bg-gray-50">{{ $empresa->abreviatura_empresa }}</div>
+                        <div class="rounded-md p-2 bg-gray-50">{{ $empresa->abreviatura_empresa }}</div>
                     </div>
                     <div>
                         <p class="font-semibold">Nombre:</p>
-                        <div class="border rounded-md p-2 bg-gray-50">{{ $empresa->nombre_empresa }}</div>
+                        <div class="rounded-md p-2 bg-gray-50">{{ $empresa->nombre_empresa }}</div>
                     </div>
                     <div>
                         <p class="font-semibold">Código donante:</p>
-                        <div class="border rounded-md p-2 bg-gray-50">{{ $empresa->codigo_donante ?? 'N/A' }}</div>
+                        <div class="rounded-md p-2 bg-gray-50">{{ $empresa->codigo_donante ?? 'N/A' }}</div>
                     </div>
                     <div>
                         <p class="font-semibold">Estado:</p>
-                        <div class="border rounded-md p-2 bg-gray-50">{{ $empresa->estado }}</div>
+                        <div class="rounded-md p-2 bg-gray-50">{{ $empresa->estado }}</div>
                     </div>
                     <div>
                         <p class="font-semibold">Tipo de cooperación:</p>
-                        <div class="border rounded-md p-2 bg-gray-50">{{ $empresa->tipo_cooperacion ?? 'N/A' }}</div>
+                        <div class="rounded-md p-2 bg-gray-50">{{ $empresa->tipo_cooperacion ?? 'N/A' }}</div>
                     </div>
                     <div>
                         <p class="font-semibold">Tipo de empresa:</p>
-                        <div class="border rounded-md p-2 bg-gray-50">{{ $empresa->tipoEmpresa->nombre ?? 'N/A' }}</div>
+                        <div class="rounded-md p-2 bg-gray-50">{{ $empresa->tipoEmpresa->nombre ?? 'N/A' }}</div>
                     </div>
                     <div>
                         <p class="font-semibold">Tipo de relación:</p>
-                        <div class="border rounded-md p-2 bg-gray-50">{{ $empresa->tipo_relacion ?? 'N/A' }}</div>
+                        <div class="rounded-md p-2 bg-gray-50">{{ $empresa->tipo_relacion ?? 'N/A' }}</div>
                     </div>
                     <div>
                         <p class="font-semibold">Dirección:</p>
-                        <div class="border rounded-md p-2 bg-gray-50">{{ $empresa->direccion ?? 'N/A' }}</div>
+                        <div class="rounded-md p-2 bg-gray-50">{{ $empresa->direccion ?? 'N/A' }}</div>
                     </div>
                 </div>
 
