@@ -16,7 +16,7 @@
 
     <!-- Styles / Scripts -->
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/gestion_empresas.js'])
+        @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/gestion_empresas.js'])
     @endif
 </head>
 
@@ -57,14 +57,22 @@
                     class="pl-10 pr-4 py-2 w-full bg-gray-100 text-gray-800 border border-gray-300 rounded-md shadow-sm text-sm focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500">
             </div>
             <div class="flex items-center gap-2">
-                <select id="filtroListado" class="bg-white border border-gray-300 text-sm rounded-md px-3 py-2 text-gray-700 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                <select id="filtroListado"
+                    class="bg-white border border-gray-300 text-sm rounded-md px-3 py-2 text-gray-700 shadow-sm focus:ring-blue-500 focus:border-blue-500">
                     <option value="">Filtrar listado...</option>
 
                     <!-- Tipo de empresa -->
-                    <option disabled class="font-semibold">─ Tipo de empresa ─</option>
-                    <option value="empresa_multitarea">Organismos Multitarea</option>
+                    <option disabled class="font-black">─ Tipo de empresa ─</option>
+                    @if ($tipoEmpresasList->isEmpty())
+                        <option disabled class="font-thin">Sin Registros</option>
+                    @else
+                        @foreach ($tipoEmpresasList as $tipoEmpresa)
+                            <option value="{{ $tipoEmpresa->nombre }}">{{ $tipoEmpresa->nombre }}</option>
+                        @endforeach
+                    @endif
+                    <!-- <option value="empresa_multitarea">Organismos Multitarea</option>
                     <option value="empresa_bilaterales">Organismos Bilaterales</option>
-                    <option value="empresa_gubernamentales">Instituciones Gubernamentales</option>
+                    <option value="empresa_gubernamentales">Instituciones Gubernamentales</option> -->
 
                     <!-- Sede -->
                     <option disabled class="font-semibold">─ Sede ─</option>
@@ -86,7 +94,8 @@
                 </select>
 
                 <!-- Botón de recarga -->
-                <button onclick="restablecerFiltros()" class="text-blue-700 hover:text-blue-900" title="Restablecer filtros">
+                <button onclick="restablecerFiltros()" class="text-blue-700 hover:text-blue-900"
+                    title="Restablecer filtros">
                     <i class="fa-solid fa-rotate-right text-lg"></i>
                 </button>
             </div>
@@ -94,10 +103,12 @@
 
         <!-- Botones sección -->
         <div class="flex gap-4 mb-6">
-            <button onclick="mostrarSeccion('tipoEmpresa')" class="bg-white shadow-md px-6 py-3 rounded-xl text-gray-700 font-medium hover:bg-blue-100 transition">
+            <button onclick="mostrarSeccion('tipoEmpresa', this)"
+                class="seccion-btn bg-title text-white shadow-md px-6 py-3 rounded-xl text-gray-700 font-medium hover:bg-[#003b5c] hover:text-white transition">
                 Tipo de empresa
             </button>
-            <button onclick="mostrarSeccion('listadoEmpresas')" class="bg-white shadow-md px-6 py-3 rounded-xl text-gray-700 font-medium hover:bg-blue-100 transition">
+            <button onclick="mostrarSeccion('listadoEmpresas', this)"
+                class="seccion-btn shadow-md px-6 py-3 rounded-xl text-gray-700 font-medium hover:bg-[#003b5c] hover:text-white transition">
                 Listado de empresas
             </button>
         </div>
@@ -115,22 +126,40 @@
                             <th class="px-4 py-2">Acciones</th>
                         </tr>
                     </thead>
-                    <!-- Ejemplo de prueba -->
                     <tbody class="divide-y divide-gray-200  text-gray-700">
-                        <tr>
-                            <td class="px-4 py-2">1</td>
-                            <td class="px-4 py-2">Tecnología</td>
-                            <td class="px-4 py-2">Empresas dedicadas al desarrollo de software y hardware</td>
-                            <td class="px-4 py-2 space-x-2">
-                                <button data-open-modal="modalEditar">
-                                    <i class="fa-solid fa-pen text-blue-600 hover:text-blue-800"></i>
-                                </button>
-                                <button data-open-modal="modalConfirmarEliminarr">
-                                    <i class="fa-solid fa-trash text-red-600 hover:text-red-800"></i>
-                                </button>
+                        @if ($tipoEmpresasList->isEmpty()) <!-- Verificando si esta vacío -->
+                            <tr>
+                                <td colspan="4" class="text-center py-5">
+                                    <i class="fa-regular fa-folder-open mr-1"></i>
+                                    No se encontraron Tipos de Empresa
+                                </td>
+                            </tr>
+                        @else
+                            <!--{{ $i = 0 }}  Iniciando el contador -->
+                            @foreach ($tipoEmpresasList->where('habilitada', 1) as $tipoEmpresa)
+                                <!-- Mapeo de Tipo de Empresas -->
+                                <tr>
+                                    <td class="px-4 py-2">{{ $tipoEmpresa->tipo_empresa_id }}</td>
+                                    <td class="px-4 py-2">{{ $tipoEmpresa->nombre }}</td>
+                                    <td class="px-4 py-2">{{ $tipoEmpresa->descripcion }}</td>
+                                    <td class="px-4 py-2 space-x-2">
+                                        <!-- Botón Editar -->
+                                        <form action="{{ route('tipos-empresa.index') }}" method="GET" style="display: inline;">
+                                            <input type="hidden" name="editar" value="{{ $tipoEmpresa->tipo_empresa_id }}">
+                                            <button type="submit">
+                                                <i class="fa-solid fa-pen text-blue-600 hover:text-blue-800"></i>
+                                            </button>
+                                        </form>
 
-                            </td>
-                        </tr>
+                                        <!-- Botón Eliminar (abre modal de confirmación) -->
+                                        <button data-open-modal="modalEliminarTipoEmpresa-{{ $tipoEmpresa->tipo_empresa_id }}">
+                                            <i class="fa-solid fa-trash text-red-600 hover:text-red-800"></i>
+                                        </button>
+
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @endif
                     </tbody>
                 </table>
             </div>
@@ -165,7 +194,7 @@
                                 <button data-open-modal="modalEditarEmpresa">
                                     <i class="fa-solid fa-pen text-blue-600 hover:text-blue-800"></i>
                                 </button>
-                                <button data-open-modal="modalConfirmarEliminar">
+                                <button data-open-modal="modalEliminarEmpresa">
                                     <i class="fa-solid fa-trash text-red-600 hover:text-red-800"></i>
                                 </button>
                             </td>
@@ -180,8 +209,7 @@
     <!-- modales -->
 
     <!-- Modal Agregar Tipo de Empresa -->
-    <div data-modal-id="modalAgregarTipo"
-        class="transit fixed inset-0 bg-black/60 flex items-center justify-center z-50
+    <div data-modal-id="modalAgregarTipo" class="transit fixed inset-0 bg-black/60 flex items-center justify-center z-50
             opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
             <div class="flex items-center justify-between mb-4">
@@ -193,31 +221,35 @@
                 </button>
             </div>
 
-            <p class="text-gray-600 mb-6">Proporciona información sobre el tipo de empresa a registrar</p>
+            <form action="{{ route('tipos-empresa.store') }}" method="POST">
+                @csrf
 
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">N°</label>
-                    <input type="text" class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800" placeholder="ID automático o manual" />
+                <p class="text-gray-600 mb-6">Proporciona información sobre el tipo de empresa a registrar</p>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Nombre del tipo de empresa</label>
+                        <input name="nombre" type="text" id="inputNombreTipo"
+                            class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800" required />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+                        <textarea name="descripcion" id="inputDescripcionTipo"
+                            class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800" rows="3"
+                            required></textarea>
+                    </div>
+                    <div class="flex justify-end gap-2">
+                        <button data-close-modal
+                            class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 transition">
+                            Cancelar
+                        </button>
+                        <button type="submit"
+                            class="bg-blue-700 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition">
+                            Guardar
+                        </button>
+                    </div>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Nombre del tipo de empresa</label>
-                    <input type="text" class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800" placeholder="Nombre del tipo" />
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
-                    <textarea class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800" rows="3" placeholder="Descripción del tipo"></textarea>
-                </div>
-                <div class="flex justify-end gap-2">
-                    <button data-close-modal
-                        class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 transition">
-                        Cancelar
-                    </button>
-                    <button class="bg-blue-700 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition">
-                        Guardar
-                    </button>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 
@@ -242,29 +274,36 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 text-sm">
                 <div>
                     <label class="block font-medium text-gray-700 mb-1">Abreviatura</label>
-                    <input type="text" class="w-full bg-gray-100 border border-gray-400 text-gray-800 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="Ej: INTEC">
+                    <input type="text"
+                        class="w-full bg-gray-100 border border-gray-400 text-gray-800 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
+                        placeholder="Ej: INTEC">
                 </div>
                 <div>
                     <label class="block font-medium text-gray-700 mb-1">Nombre de la empresa</label>
-                    <input type="text" class="w-full bg-gray-100 border border-gray-400 text-gray-800 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="Ej: InnovaTech">
+                    <input type="text"
+                        class="w-full bg-gray-100 border border-gray-400 text-gray-800 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
+                        placeholder="Ej: InnovaTech">
                 </div>
                 <div>
                     <label class="block font-medium text-gray-700 mb-1">Estado</label>
-                    <select class="w-full bg-gray-100 border border-gray-400 text-gray-800 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600">
+                    <select
+                        class="w-full bg-gray-100 border border-gray-400 text-gray-800 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600">
                         <option>Activa</option>
                         <option>Finalizada</option>
                     </select>
                 </div>
                 <div>
                     <label class="block font-medium text-gray-700 mb-1">Tipo de cooperación</label>
-                    <select class="w-full bg-gray-100 border border-gray-400 text-gray-800 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600">
+                    <select
+                        class="w-full bg-gray-100 border border-gray-400 text-gray-800 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600">
                         <option>Multilateral</option>
                         <option></option>
                     </select>
                 </div>
                 <div>
                     <label class="block font-medium text-gray-700 mb-1">Tipo de relación</label>
-                    <select class="w-full bg-gray-100 border border-gray-400 text-gray-800 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600">
+                    <select
+                        class="w-full bg-gray-100 border border-gray-400 text-gray-800 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600">
                         <option>Proyecto</option>
                         <option>Consultoría</option>
                         <option>Donaciones</option>
@@ -273,7 +312,8 @@
                 </div>
                 <div>
                     <label class="block font-medium text-gray-700 mb-1">Tipo de empresa</label>
-                    <select class="w-full bg-gray-100 border border-gray-400 text-gray-800 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600">
+                    <select
+                        class="w-full bg-gray-100 border border-gray-400 text-gray-800 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600">
                         <option>Organización Multilateral</option>
                         <option>Organismos Bilaterales</option>
                         <option>Instituciones gubernamentales</option>
@@ -284,7 +324,9 @@
             <!-- Dirección -->
             <div class="mt-4">
                 <label class="block font-medium text-gray-700 mb-1">Dirección</label>
-                <textarea rows="3" class="w-full bg-gray-100 border border-gray-400 text-gray-800 rounded-md px-3 py-2 overflow-y-auto resize-none focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="Dirección completa de la empresa"></textarea>
+                <textarea rows="3"
+                    class="w-full bg-gray-100 border border-gray-400 text-gray-800 rounded-md px-3 py-2 overflow-y-auto resize-none focus:outline-none focus:ring-2 focus:ring-green-600"
+                    placeholder="Dirección completa de la empresa"></textarea>
             </div>
 
             <!-- Botones -->
@@ -298,45 +340,54 @@
 
 
     <!-- Modal para editar tipo de empresa -->
-<div data-modal-id="modalEditar"
-     class="transit fixed inset-0 bg-black/60 flex items-center justify-center z-50
-            opacity-0 pointer-events-none transition-opacity duration-300">
-  <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
-    <div class="flex items-center justify-between mb-4">
-      <h3 class="text-lg font-semibold text-gray-800">
-        <i class="fa-solid fa-pen mr-2 text-blue-700"></i>Editar el tipo de empresa
-      </h3>
-      <button data-close-modal aria-label="Cerrar modal">
-        <i class="fa-solid fa-xmark text-gray-600 hover:text-red-600"></i>
-      </button>
-    </div>
+    <div
+        class="transit fixed inset-0 bg-black/60 flex items-center justify-center z-50
+    {{ isset($editarTipoEmpresa) ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none' }} transition-opacity duration-300">
+        <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
+            <form action="{{ route('tipos-empresa.update', $editarTipoEmpresa->tipo_empresa_id ?? 0) }}" method="POST">
+                @csrf
+                @method('PUT')
 
-    <!-- Subtítulo -->
-    <p class="text-gray-600 mb-6">Puedes modificar la información del tipo de empresa</p>
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">
+                        <i class="fa-solid fa-pen mr-2 text-blue-700"></i>Editar el tipo de empresa
+                    </h3>
+                    <a href="{{ route('tipos-empresa.index') }}">
+                        <i class="fa-solid fa-xmark text-gray-600 hover:text-red-600"></i>
+                    </a>
+                </div>
 
-    <div class="space-y-4">
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Nombre del tipo de empresa</label>
-        <input type="text" class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800"
-               placeholder="Nuevo nombre" />
-      </div>
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Descripción del tipo de empresa</label>
-        <textarea class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800"
-                  rows="3" placeholder="Nueva descripción"></textarea>
-      </div>
-      <div class="flex justify-end gap-2 mt-6">
-        <button data-close-modal
-                class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 transition">
-          Cancelar
-        </button>
-        <button class="bg-blue-700 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition">
-          Guardar cambios
-        </button>
-      </div>
+                <p class="text-gray-600 mb-6">Puedes modificar la información del tipo de empresa</p>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Nombre del tipo de empresa</label>
+                        <input type="text" name="nombre"
+                            class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800"
+                            placeholder="Nuevo nombre" value="{{ old('nombre', $editarTipoEmpresa->nombre ?? '') }}"
+                            required />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Descripción del tipo de
+                            empresa</label>
+                        <textarea name="descripcion"
+                            class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800" rows="3"
+                            placeholder="Nueva descripción">{{ old('descripcion', $editarTipoEmpresa->descripcion ?? '') }}</textarea>
+                    </div>
+                    <div class="flex justify-end gap-2 mt-6">
+                        <a href="{{ route('tipos-empresa.index') }}"
+                            class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 transition">
+                            Cancelar
+                        </a>
+                        <button type="submit"
+                            class="bg-blue-700 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition">
+                            Guardar cambios
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-  </div>
-</div>
 
 
     <!-- Modal para editar empresa -->
@@ -360,16 +411,22 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 text-sm text-gray-700">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Abreviatura</label>
-                    <input type="text" id="empresaAbreviatura" class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800" placeholder="Ej: INTEC">
+                    <input type="text" id="empresaAbreviatura"
+                        class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800"
+                        placeholder="Ej: INTEC">
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Nombre de la empresa</label>
-                    <input type="text" id="empresaNombre" class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800" placeholder="Ej: InnovaTech">
+                    <input type="text" id="empresaNombre"
+                        class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800"
+                        placeholder="Ej: InnovaTech">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Código donante</label>
-                    <input type="text" id="empresaCodigoDonante" class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800" placeholder="Ej: CD-1023">
+                    <input type="text" id="empresaCodigoDonante"
+                        class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800"
+                        placeholder="Ej: CD-1023">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Estado</label>
@@ -381,7 +438,8 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de cooperación</label>
-                    <select id="empresaCooperacion" class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800">
+                    <select id="empresaCooperacion"
+                        class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800">
                         <option value="">Seleccione un tipo</option>
                         <option value="Multilateral">Multilateral</option>
                         <option value=""></option>
@@ -398,7 +456,8 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de relación</label>
-                    <select id="empresaRelacion" class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800">
+                    <select id="empresaRelacion"
+                        class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800">
                         <option value="">Seleccione una relación</option>
                         <option value="Proyecto">Proyecto</option>
                         <option value="Consultoria">Consultoría</option>
@@ -408,7 +467,9 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Dirección</label>
-                    <textarea id="empresaDireccion" rows="3" class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800 resize-y overflow-y-auto" placeholder="Ej: Av. Central, San Salvador"></textarea>
+                    <textarea id="empresaDireccion" rows="3"
+                        class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800 resize-y overflow-y-auto"
+                        placeholder="Ej: Av. Central, San Salvador"></textarea>
                 </div>
 
                 <br>
@@ -419,7 +480,8 @@
                         class="min-w-[120px] px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition">
                         Cancelar
                     </button>
-                    <button class="min-w-[150px] px-4 py-2 bg-blue-700 text-white rounded-md hover:bg-blue-800 transition">
+                    <button
+                        class="min-w-[150px] px-4 py-2 bg-blue-700 text-white rounded-md hover:bg-blue-800 transition">
                         Guardar cambios
                     </button>
                 </div>
@@ -429,7 +491,7 @@
 
 
     <!-- Modal Confirmación de Eliminación en listado-->
-    <div data-modal-id="modalConfirmarEliminar" class="transit fixed inset-0 bg-black/60 flex items-center justify-center z-50
+    <div data-modal-id="modalEliminarEmpresa" class="transit fixed inset-0 bg-black/60 flex items-center justify-center z-50
             opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
             <div class="flex items-center justify-between mb-4">
@@ -440,33 +502,44 @@
                     <i class="fa-solid fa-xmark text-gray-600 hover:text-red-600"></i>
                 </button>
             </div>
-            <p class="text-gray-700 mb-4">¿Estás seguro de eliminar esta empresa? <strong>Esta acción no se puede deshacer.</strong></p>
+            <p class="text-gray-700 mb-4">¿Estás seguro de eliminar esta empresa? <strong>Esta acción no se puede
+                    deshacer.</strong></p>
             <div class="flex justify-end gap-2">
-                <button data-close-modal class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">Cancelar</button>
+                <button data-close-modal
+                    class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">Cancelar</button>
                 <button class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700">Eliminar</button>
             </div>
         </div>
     </div>
 
     <!-- Modal Confirmación de Eliminación en tipo-->
-    <div data-modal-id="modalConfirmarEliminarr" class="transit fixed inset-0 bg-black/60 flex items-center justify-center z-50
-            opacity-0 pointer-events-none transition-opacity duration-300">
-        <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold text-gray-800">
-                    <i class="fa-solid fa-triangle-exclamation text-red-600 mr-2"></i>Confirmar eliminación
-                </h3>
-                <button data-close-modal>
-                    <i class="fa-solid fa-xmark text-gray-600 hover:text-red-600"></i>
-                </button>
-            </div>
-            <p class="text-gray-700 mb-4">¿Estás seguro de eliminar este tipo de empresa? <strong>Esta acción no se puede deshacer.</strong></p>
-            <div class="flex justify-end gap-2">
-                <button data-close-modal class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">Cancelar</button>
-                <button class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700">Eliminar</button>
+    @foreach ($tipoEmpresasList as $tipoEmpresa)
+        <div data-modal-id="modalEliminarTipoEmpresa-{{ $tipoEmpresa->tipo_empresa_id }}"
+            class="transit fixed inset-0 bg-black/60 flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity duration-300">
+            <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">
+                        <i class="fa-solid fa-triangle-exclamation text-red-600 mr-2"></i>Confirmar deshabilitación
+                    </h3>
+                    <button data-close-modal>
+                        <i class="fa-solid fa-xmark text-gray-600 hover:text-red-600"></i>
+                    </button>
+                </div>
+                <p class="text-gray-700 mb-4">¿Estás seguro de deshabilitar este tipo de empresa? <strong>No se mostrará en
+                        los listados.</strong></p>
+                <div class="flex justify-end gap-2">
+                    <button data-close-modal
+                        class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">Cancelar</button>
+                    <form action="{{ route('tipos-empresa.destroy', $tipoEmpresa->tipo_empresa_id) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit"
+                            class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700">Deshabilitar</button>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
+    @endforeach
 
     <!-- Modal Detalles de Empresa -->
     <div data-modal-id="modalDetallesEmpresa" class="transit fixed inset-0 bg-black/60 flex items-center justify-center z-50
