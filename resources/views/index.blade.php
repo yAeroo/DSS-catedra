@@ -41,9 +41,9 @@
                     <i class="fa-solid fa-building text-6xl text-title mb-5"></i>
                     <h2 class="text-xl font-semibold text-gray-800">Administrar empresas</h2>
                     <p class="text-gray-600 text-center mt-2">Gestiona tipos de empresa o agrega nuevas empresas.</p>
-                    <a href="{{ url('gestion_empresas') }}">
+                    <a href="{{ route('tipos-empresa.index') }}">
                         <button
-                            class="bg-title rounded-md px-4 py-2 mt-4 hover:bg-[#003b5c] outline-current">Acceder</button>
+                            class="bg-title rounded-md px-4 py-2 mt-4 hover:bg-[#003b5c] outline-current text-white">Acceder</button>
                     </a>
                 </div>
 
@@ -53,9 +53,9 @@
                     <h2 class="text-xl font-semibold text-gray-800">Administrar convenios</h2>
                     <p class="text-gray-600 text-center mt-2">Echa un vistazo a los convenios actuales o agrega nuevos.
                     </p>
-                    <a href="{{ url('listado_convenios') }}">
+                    <a href="{{ route('convenios.index') }}">
                         <button
-                            class="bg-title rounded-md px-4 py-2 mt-4 hover:bg-[#003b5c] outline-current">Acceder</button>
+                            class="bg-title rounded-md px-4 py-2 mt-4 hover:bg-[#003b5c] outline-current text-white">Acceder</button>
                     </a>
 
                 </div>

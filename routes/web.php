@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TipoEmpresaController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TipoEmpresaController;
+use App\Http\Controllers\ConveniosController;
 
 // Proceso de autenticación ====
 Route::middleware(['auth.guest'])->group(function () {
@@ -17,10 +18,7 @@ Route::middleware(['auth.login'])->group(function () {
     // Rutas protegidas
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    // Página principal
-    Route::get('/', function () {
-        return view('index');
-    })->name('index');
+    Route::get('/', function () { return view('index'); })->name('index');
 
     // Gestión de Empresas
     Route::get('gestion_empresas', [TipoEmpresaController::class, 'index'])->name('tipos-empresa.index');
@@ -29,7 +27,13 @@ Route::middleware(['auth.login'])->group(function () {
     Route::delete('gestion_empresas/{id}', [TipoEmpresaController::class, 'destroy'])->name('tipos-empresa.destroy');
 
     // Gestión de Convenios
-    Route::get('listado_convenios', function () {
-        return view('listado_convenios');
-    })->name('listado_convenios');
+    Route::get('/listado_convenios', [ConveniosController::class, 'index'])->name('convenios.index');
+    Route::post('/convenio_store', [ConveniosController::class, 'store'])->name('convenios.store');
+    Route::get('/convenio_details/{id}', [ConveniosController::class, 'details'])->name('convenios.details');
+    Route::post('/convenio_update', [ConveniosController::class, 'update'])->name('convenios.update');
+    Route::post('/convenio_delete', [ConveniosController::class, 'destroy'])->name('convenios.delete');
+
+    Route::post('/convenio_upload', [ConveniosController::class, 'upload'])->name('convenios.upload');
+    Route::get('/convenio_download/{id}', [ConveniosController::class, 'download'])->name('convenios.download');
+
 });
