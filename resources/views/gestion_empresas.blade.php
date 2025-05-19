@@ -67,9 +67,12 @@
                         <option disabled class="font-thin">Sin Registros</option>
                     @else
                         @foreach ($tipoEmpresasList as $tipoEmpresa)
-                        <option value="{{ $tipoEmpresa->nombre }}">{{ $tipoEmpresa->nombre }}</option>
+                            <option value="{{ $tipoEmpresa->nombre }}">{{ $tipoEmpresa->nombre }}</option>
                         @endforeach
                     @endif
+                    <!-- <option value="empresa_multitarea">Organismos Multitarea</option>
+                    <option value="empresa_bilaterales">Organismos Bilaterales</option>
+                    <option value="empresa_gubernamentales">Instituciones Gubernamentales</option> -->
 
                     <!-- Sede -->
                     <option disabled class="font-semibold">─ Sede ─</option>
@@ -101,7 +104,7 @@
         <!-- Botones sección -->
         <div class="flex gap-4 mb-6">
             <button onclick="mostrarSeccion('tipoEmpresa', this)"
-                class="seccion-btn bg-title text-white shadow-md px-6 py-3 rounded-xl font-medium hover:bg-[#003b5c] hover:text-white transition">
+                class="seccion-btn bg-title text-white shadow-md px-6 py-3 rounded-xl text-gray-700 font-medium hover:bg-[#003b5c] hover:text-white transition">
                 Tipo de empresa
             </button>
             <button onclick="mostrarSeccion('listadoEmpresas', this)"
@@ -123,7 +126,6 @@
                             <th class="px-4 py-2">Acciones</th>
                         </tr>
                     </thead>
-                    <!-- Ejemplo de prueba -->
                     <tbody class="divide-y divide-gray-200  text-gray-700">
                         @if ($tipoEmpresasList->isEmpty()) <!-- Verificando si esta vacío -->
                             <tr>
@@ -134,16 +136,23 @@
                             </tr>
                         @else
                             <!--{{ $i = 0 }}  Iniciando el contador -->
-                            @foreach ($tipoEmpresasList as $tipoEmpresa) <!-- Mapeo de Mascotas -->
+                            @foreach ($tipoEmpresasList->where('habilitada', 1) as $tipoEmpresa)
+                                <!-- Mapeo de Tipo de Empresas -->
                                 <tr>
                                     <td class="px-4 py-2">{{ $tipoEmpresa->tipo_empresa_id }}</td>
                                     <td class="px-4 py-2">{{ $tipoEmpresa->nombre }}</td>
                                     <td class="px-4 py-2">{{ $tipoEmpresa->descripcion }}</td>
                                     <td class="px-4 py-2 space-x-2">
-                                        <button data-open-modal="modalEditar">
-                                            <i class="fa-solid fa-pen text-blue-600 hover:text-blue-800"></i>
-                                        </button>
-                                        <button data-open-modal="modalConfirmarEliminarr">
+                                        <!-- Botón Editar -->
+                                        <form action="{{ route('tipos-empresa.index') }}" method="GET" style="display: inline;">
+                                            <input type="hidden" name="editar" value="{{ $tipoEmpresa->tipo_empresa_id }}">
+                                            <button type="submit">
+                                                <i class="fa-solid fa-pen text-blue-600 hover:text-blue-800"></i>
+                                            </button>
+                                        </form>
+
+                                        <!-- Botón Eliminar (abre modal de confirmación) -->
+                                        <button data-open-modal="modalEliminarTipoEmpresa-{{ $tipoEmpresa->tipo_empresa_id }}">
                                             <i class="fa-solid fa-trash text-red-600 hover:text-red-800"></i>
                                         </button>
 
@@ -185,7 +194,7 @@
                                 <button data-open-modal="modalEditarEmpresa">
                                     <i class="fa-solid fa-pen text-blue-600 hover:text-blue-800"></i>
                                 </button>
-                                <button data-open-modal="modalConfirmarEliminar">
+                                <button data-open-modal="modalEliminarEmpresa">
                                     <i class="fa-solid fa-trash text-red-600 hover:text-red-800"></i>
                                 </button>
                             </td>
@@ -331,42 +340,52 @@
 
 
     <!-- Modal para editar tipo de empresa -->
-    <div data-modal-id="modalEditar" class="transit fixed inset-0 bg-black/60 flex items-center justify-center z-50
-            opacity-0 pointer-events-none transition-opacity duration-300">
+    <div
+        class="transit fixed inset-0 bg-black/60 flex items-center justify-center z-50
+    {{ isset($editarTipoEmpresa) ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none' }} transition-opacity duration-300">
         <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold text-gray-800">
-                    <i class="fa-solid fa-pen mr-2 text-blue-700"></i>Editar el tipo de empresa
-                </h3>
-                <button data-close-modal aria-label="Cerrar modal">
-                    <i class="fa-solid fa-xmark text-gray-600 hover:text-red-600"></i>
-                </button>
-            </div>
+            <form action="{{ route('tipos-empresa.update', $editarTipoEmpresa->tipo_empresa_id ?? 0) }}" method="POST">
+                @csrf
+                @method('PUT')
 
-            <!-- Subtítulo -->
-            <p class="text-gray-600 mb-6">Puedes modificar la información del tipo de empresa</p>
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">
+                        <i class="fa-solid fa-pen mr-2 text-blue-700"></i>Editar el tipo de empresa
+                    </h3>
+                    <a href="{{ route('tipos-empresa.index') }}">
+                        <i class="fa-solid fa-xmark text-gray-600 hover:text-red-600"></i>
+                    </a>
+                </div>
 
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Nombre del tipo de empresa</label>
-                    <input type="text" class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800"
-                        placeholder="Nuevo nombre" />
+                <p class="text-gray-600 mb-6">Puedes modificar la información del tipo de empresa</p>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Nombre del tipo de empresa</label>
+                        <input type="text" name="nombre"
+                            class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800"
+                            placeholder="Nuevo nombre" value="{{ old('nombre', $editarTipoEmpresa->nombre ?? '') }}"
+                            required />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Descripción del tipo de
+                            empresa</label>
+                        <textarea name="descripcion"
+                            class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800" rows="3"
+                            placeholder="Nueva descripción">{{ old('descripcion', $editarTipoEmpresa->descripcion ?? '') }}</textarea>
+                    </div>
+                    <div class="flex justify-end gap-2 mt-6">
+                        <a href="{{ route('tipos-empresa.index') }}"
+                            class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 transition">
+                            Cancelar
+                        </a>
+                        <button type="submit"
+                            class="bg-blue-700 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition">
+                            Guardar cambios
+                        </button>
+                    </div>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Descripción del tipo de empresa</label>
-                    <textarea class="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-800" rows="3"
-                        placeholder="Nueva descripción"></textarea>
-                </div>
-                <div class="flex justify-end gap-2 mt-6">
-                    <button data-close-modal
-                        class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 transition">
-                        Cancelar
-                    </button>
-                    <button class="bg-blue-700 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition">
-                        Guardar cambios
-                    </button>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 
@@ -472,7 +491,7 @@
 
 
     <!-- Modal Confirmación de Eliminación en listado-->
-    <div data-modal-id="modalConfirmarEliminar" class="transit fixed inset-0 bg-black/60 flex items-center justify-center z-50
+    <div data-modal-id="modalEliminarEmpresa" class="transit fixed inset-0 bg-black/60 flex items-center justify-center z-50
             opacity-0 pointer-events-none transition-opacity duration-300">
         <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
             <div class="flex items-center justify-between mb-4">
@@ -494,26 +513,33 @@
     </div>
 
     <!-- Modal Confirmación de Eliminación en tipo-->
-    <div data-modal-id="modalConfirmarEliminarr" class="transit fixed inset-0 bg-black/60 flex items-center justify-center z-50
-            opacity-0 pointer-events-none transition-opacity duration-300">
-        <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold text-gray-800">
-                    <i class="fa-solid fa-triangle-exclamation text-red-600 mr-2"></i>Confirmar eliminación
-                </h3>
-                <button data-close-modal>
-                    <i class="fa-solid fa-xmark text-gray-600 hover:text-red-600"></i>
-                </button>
-            </div>
-            <p class="text-gray-700 mb-4">¿Estás seguro de eliminar este tipo de empresa? <strong>Esta acción no se
-                    puede deshacer.</strong></p>
-            <div class="flex justify-end gap-2">
-                <button data-close-modal
-                    class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">Cancelar</button>
-                <button class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700">Eliminar</button>
+    @foreach ($tipoEmpresasList as $tipoEmpresa)
+        <div data-modal-id="modalEliminarTipoEmpresa-{{ $tipoEmpresa->tipo_empresa_id }}"
+            class="transit fixed inset-0 bg-black/60 flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity duration-300">
+            <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">
+                        <i class="fa-solid fa-triangle-exclamation text-red-600 mr-2"></i>Confirmar deshabilitación
+                    </h3>
+                    <button data-close-modal>
+                        <i class="fa-solid fa-xmark text-gray-600 hover:text-red-600"></i>
+                    </button>
+                </div>
+                <p class="text-gray-700 mb-4">¿Estás seguro de deshabilitar este tipo de empresa? <strong>No se mostrará en
+                        los listados.</strong></p>
+                <div class="flex justify-end gap-2">
+                    <button data-close-modal
+                        class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">Cancelar</button>
+                    <form action="{{ route('tipos-empresa.destroy', $tipoEmpresa->tipo_empresa_id) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit"
+                            class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700">Deshabilitar</button>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
+    @endforeach
 
     <!-- Modal Detalles de Empresa -->
     <div data-modal-id="modalDetallesEmpresa" class="transit fixed inset-0 bg-black/60 flex items-center justify-center z-50
