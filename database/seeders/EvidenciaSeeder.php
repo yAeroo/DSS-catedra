@@ -14,7 +14,7 @@ class EvidenciaSeeder extends Seeder
     public function run(): void{
         Evidencia::create([
             'convenio_id' => 1,
-            'nombre_archivo' => 'BID_04-05-2024_18_05_05.xlsx',
+            'nombre_archivo' => 'AACID_5_19_2025_01_16_51.pdf',
         ]);
     }
 }

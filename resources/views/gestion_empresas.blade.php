@@ -70,9 +70,6 @@
                         <option value="{{ $tipoEmpresa->nombre }}">{{ $tipoEmpresa->nombre }}</option>
                         @endforeach
                     @endif
-                    <!-- <option value="empresa_multitarea">Organismos Multitarea</option>
-                    <option value="empresa_bilaterales">Organismos Bilaterales</option>
-                    <option value="empresa_gubernamentales">Instituciones Gubernamentales</option> -->
 
                     <!-- Sede -->
                     <option disabled class="font-semibold">─ Sede ─</option>
@@ -104,7 +101,7 @@
         <!-- Botones sección -->
         <div class="flex gap-4 mb-6">
             <button onclick="mostrarSeccion('tipoEmpresa', this)"
-                class="seccion-btn bg-title text-white shadow-md px-6 py-3 rounded-xl text-gray-700 font-medium hover:bg-[#003b5c] hover:text-white transition">
+                class="seccion-btn bg-title text-white shadow-md px-6 py-3 rounded-xl font-medium hover:bg-[#003b5c] hover:text-white transition">
                 Tipo de empresa
             </button>
             <button onclick="mostrarSeccion('listadoEmpresas', this)"
