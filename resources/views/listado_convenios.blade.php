@@ -24,7 +24,7 @@
         <!-- Encabezado -->
         <div class="flex items-start justify-between mb-10">
             <div class="space-y-2">
-                <a href="#" class="text-title hover:underline text-sm">
+                <a href="{{ url("/") }}" class="text-blue-700 hover:underline text-sm text-decoration-none">
                     <i class="fa-solid fa-arrow-left mr-1"></i> Regresar
                 </a>
                 <h1 class="text-3xl font-bold text-general">Listado de Convenios</h1>
@@ -548,7 +548,7 @@
     <!-- Modal Subir Archivo -->
 <div data-modal-id="modalSubirArchivo" class="transit fixed inset-0 bg-black/60 flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity duration-300">
   <div class="bg-background rounded-xl shadow-lg w-[90vw] max-w-xl p-6 max-h-[90vh] overflow-y-auto">
-    
+
     <!-- Encabezado -->
     <div class="flex items-center justify-between mb-4">
       <h3 class="text-lg font-semibold text-general flex items-center">
