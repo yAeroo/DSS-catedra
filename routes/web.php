@@ -1,19 +1,24 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TipoEmpresaController;
 
-// Proceso de autenticación ====
-Route::middleware(['auth.guest'])->group(function () {
-    Route::get('/login', function () {return view('login');})->name('login');
-    Route::post('/auth', [AuthController::class, 'login'])->name('login.auth');
+//Index
+Route::get('/', function () {
+    return view('index');
 });
 
-Route::middleware(['auth.login'])->group(function () {
-    // Rutas protegidas
-    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+//Gestion de Empresas
+Route::get('gestion_empresas', [TipoEmpresaController::class, 'index'])->name('tipos-empresa.index');
+/* Route::get('gestion_empresas', function () {
+    return view('gestion_empresas');
+})->name('gestion_empresas'); */
 
-    Route::get('/', function () { return view('index'); })->name('index');
-    Route::get('/gestion_empresas', function () { return view('gestion_empresas'); })->name('gestion_empresas');
-    Route::get('/listado_convenios', function () { return view('listado_convenios'); })->name('listado_convenios');
+//Create Tipo de Empresa (store)
+Route::post('gestion_empresas', [TipoEmpresaController::class, 'store'])->name('tipos-empresa.store');
+
+
+//Gestion de Convenios
+Route::get('listado_convenios', function () {
+    return view('listado_convenios');
 });
