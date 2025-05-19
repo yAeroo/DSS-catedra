@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Empresa extends Model
 {
+    protected $table = 'empresas';
     protected $primaryKey = 'empresa_id';
     protected $fillable = [
         'abreviatura_empresa',
@@ -19,6 +20,18 @@ class Empresa extends Model
         'habilitada'
     ];
 
+    public function setEstadoAttribute($value)
+    {
+        // Asegura que el valor se guarde en minúsculas
+        $val = strtolower($value);
+        $this->attributes['estado'] = ($val === 'activa' || $val === 'activo') ? 'activo' : 'inactivo';
+    }
+
+    public function getEstadoAttribute($value)
+    {
+        // Muestra el valor formateado
+        return $value === 'activo' ? 'Activa' : 'Inactiva';
+    }
     public function tipoEmpresa()
     {
         return $this->belongsTo(TipoEmpresa::class, 'tipo_empresa_id', 'tipo_empresa_id');
