@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dss-catedra-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dss-catedra
+  template:
+    metadata:
+      labels:
+        app: dss-catedra
+    spec:
+      containers:
+        - name: dss-catedra
+          image: yaeroo/dss-catedra:2.1
+          ports:
+            - containerPort: 80
+          env:
+          - name: DB_HOST
+            value: mysql
+          - name: DB_DATABASE
+            value: laravel
+          - name: DB_USERNAME
+            value: root
+          - name: DB_PASSWORD
+            value: secret
