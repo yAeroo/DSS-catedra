@@ -1,3 +1,13 @@
+import jQuery from 'jquery';
+window.$ = jQuery;
+window.jQuery = jQuery;
+
+import 'jquery-mask-plugin';
+
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
+window.iziToast = iziToast;
+
 // Mostrar secciones
 function mostrarSeccion(seccion, botonActivo) {
     // Ocultar todas las secciones

@@ -1,3 +1,13 @@
+import jQuery from 'jquery';
+window.$ = jQuery;
+window.jQuery = jQuery;
+
+import 'jquery-mask-plugin';
+
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
+window.iziToast = iziToast;
+
 document.addEventListener('DOMContentLoaded', function() {
     // Manejo de modales
     document.querySelectorAll('[data-open-modal]').forEach(button => {
